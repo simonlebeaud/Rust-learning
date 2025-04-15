@@ -3,7 +3,7 @@ use std::io;
 fn main() {
     println!("Deviner le nombre !");
 
-    println!("Veuiller entrer un nombre");
+    println!("Veuillez entrer un nombre");
 
     let mut supposition = String::new();
 
