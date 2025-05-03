@@ -1,3 +1,4 @@
+#![allow(unused)]
 #[derive(Debug)]
 struct Rectangle {
     largeur: u32,
@@ -8,10 +9,6 @@ impl Rectangle {
     fn peut_contenir(&self, other: &Rectangle) -> bool {
         self.largeur > other.largeur && self.hauteur > other.hauteur
     }
-}
-
-pub fn ajouter_deux(a: i32) -> i32 {
-    a + 2
 }
 
 pub fn accueil(name: &str) -> String {
@@ -43,6 +40,14 @@ impl Supposition {
 fn affiche_et_retourne_10(a: i32) -> i32 {
     println!("J'ai obtenu la valeur {}", a);
     10
+}
+
+pub fn ajouter_deux(a: i32) -> i32 {
+    addition_interne(a, 2)
+}
+
+fn addition_interne(a: i32, b: i32) -> i32 {
+    a + b
 }
 
 #[cfg(test)]
@@ -130,6 +135,11 @@ mod tests {
     #[test]
     fn cent() {
         assert_eq!(102, ajouter_deux(100));
+    }
+
+    #[test]
+    fn interne() {
+        assert_eq!(4, addition_interne(2, 2));
     }
 }
 
