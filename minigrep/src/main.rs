@@ -12,12 +12,8 @@ fn main() {
         process::exit(1);
     });
 
-    println!("On recherche : {}", config.recherche);
-    println!("Dans le fichier : {}", config.nom_fichier);
-
     if let Err(e) = minigrep::run(config) {
         println!("Erreur applicative : {}", e);
-
         process::exit(1);
     }
 }

@@ -8,7 +8,6 @@ pub struct Config {
 
 impl Config {
     pub fn new(args: &[String]) -> Result<Config, &'static str> {
-        // -- partie masquée ici --
         if args.len() < 3 {
             return Err("il n'y a pas assez d'arguments");
         }
@@ -21,10 +20,42 @@ impl Config {
 }
 
 pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
-    // -- partie masquée ici --
     let contenu = fs::read_to_string(config.nom_fichier)?;
 
-    println!("Dans le texte :\n{}", contenu);
+    for ligne in rechercher(&config.recherche, &contenu) {
+        println!("{}", ligne);
+    }
 
     Ok(())
+}
+
+pub fn rechercher<'a>(recherche: &str, contenu: &'a str) -> Vec<&'a str> {
+    let mut resultats = Vec::new();
+
+    for ligne in contenu.lines() {
+        if ligne.contains(recherche) {
+            resultats.push(ligne);
+        }
+    }
+
+    resultats
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn un_resultat() {
+        let recherche = "duct";
+        let contenu = "\
+Rust:
+sécurité, rapidité, productivité.
+Obtenez les trois en même temps.";
+        
+        assert_eq!(
+            vec!["sécurité, rapidité, productivité."],
+            rechercher(recherche, contenu)
+        );
+    }
 }
