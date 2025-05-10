@@ -9,13 +9,20 @@ pub struct Config {
 }
 
 impl Config {
-    pub fn new(args: &[String]) -> Result<Config, &'static str> {
+    pub fn new(mut args: env::Args) -> Result<Config, &'static str> {
         if args.len() < 3 {
             return Err("il n'y a pas assez d'arguments");
         }
 
-        let recherche = args[1].clone();
-        let nom_fichier = args[2].clone();
+        let recherche = match args.next() {
+            Some(arg) => arg,
+            None => return Err("nous n'avons pas de chhaîne de caractères"),
+        };
+
+        let nom_fichier = match args.next() {
+            Some(arg) => arg,
+            None => return Err("nous n'avpons pas de nom de fichier"),
+        };
 
         let sensible_casse = env::var("MINIGREP_INSENSIBLE_CASSE").is_err();
 
@@ -44,21 +51,13 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
 }
 
 pub fn rechercher<'a>(recherche: &str, contenu: &'a str) -> Vec<&'a str> {
-    let mut resultats = Vec::new();
-
-    for ligne in contenu.lines() {
-        if ligne.contains(recherche) {
-            resultats.push(ligne);
-        }
-    }
-
-    resultats
+    contenu
+        .lines()
+        .filter(|ligne| ligne.contains(recherche))
+        .collect()
 }
 
-pub fn rechercher_insensible_casse<'a>(
-    recherche: &str,
-    contenu: &'a str,
-) -> Vec<&'a str> {
+pub fn rechercher_insensible_casse<'a>(recherche: &str, contenu: &'a str) -> Vec<&'a str> {
     let recherche = recherche.to_lowercase();
     let mut resultats = Vec::new();
 
